@@ -43,8 +43,6 @@ def insertar_empleado():
         # Confirmar la transacción si todo es exitoso
         conn.commit()
     except Exception as e:
-        # Revertir la transacción en caso de error
-        conn.rollback()
         return jsonify({'error': str(e)}), 500
     finally:
         # Cerrar el cursor y la conexión
