@@ -2,8 +2,14 @@ POST http://localhost:5000/insertar_empleado
 Content-Type: application/json
 
 {
-  "nombre": "Juan Gutierrez", 
+  "nombre": "Sofia Rodriguez", 
   "salario": 50000
 }
+
+
+### Consultar empleados
+
+GET http://localhost:5000/listar_empleados
+
 
 

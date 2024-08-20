@@ -50,7 +50,49 @@ def insertar_empleado():
         conn.close()
 
     # Devolver el código de resultado como respuesta
-    return jsonify({'OutResulTCode': out_result_code})
+    return jsonify({'OutResultCode': out_result_code})
+
+# Ruta para obtener los empleados
+@app.route('/listar_empleados', methods=['GET'])
+def listar_empleados():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    empleados = []
+    out_result_code = 0
+
+    try:
+        # Ejecutar el procedimiento almacenado y obtener el código de resultado y los empleados
+        cursor.execute("""
+            DECLARE @OutResulTCode INT;
+            EXEC [dbo].[ListarEmpleado] @OutResulTCode = @OutResulTCode OUTPUT;
+            SELECT @OutResulTCode;
+        """)
+
+        # Obtener el valor del código de resultado
+        out_result_code = cursor.fetchone()[0]
+
+        # Obtener la lista de empleados
+        cursor.nextset() #Obtener los resultados, no el código de resultado
+        for row in cursor.fetchall():
+            empleado = {
+                'Id': row.Id,
+                'Nombre': row.Nombre,
+                'Salario': row.Salario
+            }
+            empleados.append(empleado)
+
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+    # Devolver la lista de empleados y el código de resultado
+    return jsonify({'OutResultCode': out_result_code, 'Empleados': empleados})
+
 
 
 if __name__ == '__main__':
