@@ -62,7 +62,6 @@ def listar_empleados():
     out_result_code = 0
 
     try:
-        # Ejecutar el procedimiento almacenado y obtener el código de resultado y los empleados
         cursor.execute("""
             DECLARE @OutResulTCode INT;
             EXEC [dbo].[ListarEmpleado] @OutResulTCode = @OutResulTCode OUTPUT;
@@ -90,7 +89,6 @@ def listar_empleados():
         cursor.close()
         conn.close()
 
-    # Devolver la lista de empleados y el código de resultado
     return jsonify({'OutResultCode': out_result_code, 'Empleados': empleados})
 
 

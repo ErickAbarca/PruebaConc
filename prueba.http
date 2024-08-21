@@ -2,7 +2,7 @@ POST http://localhost:5000/insertar_empleado
 Content-Type: application/json
 
 {
-  "nombre": "Sofia Rodriguez", 
+  "nombre": "Roberto Garita", 
   "salario": 50000
 }
 
