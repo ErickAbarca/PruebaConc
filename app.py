@@ -1,16 +1,18 @@
 import pyodbc
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Configuración de la conexión a la base de datos
 def get_db_connection():
     connection = pyodbc.connect(
         'DRIVER={ODBC Driver 17 for SQL Server};'
-        'SERVER=ERICKPC;'
+        'SERVER=DESKTOP-HUTR52P;'
         'DATABASE=tarea1;'
         'UID=hola;'
-        'PWD=123'
+        'PWD=12345678'
     )
     return connection
 
