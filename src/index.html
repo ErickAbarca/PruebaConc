@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Plantilla</title>
+    <style>
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        .scrollable-table {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .input {
+            width: 75%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            grid-column: 1;
+        }
+        .filaSeleccion{
+            background-color: #ffffff;
+        }
+        .boton {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 16px;
+        }
+        .enlace {
+            text-decoration: none;
+            color: black;
+        }
+        .verBoton {
+            padding: 5px;
+            margin: 2px;
+        }
+        #crear {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 16px;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-gap: 10px;
+        }
+        .container {
+            padding: 20px;
+            text-align: center;
+            background-color: #f2f2f2;
+            border-radius: 4px;
+        }
+        .boton:hover {
+            background-color: #0f140f;
+            color: white;
+            cursor: pointer;
+        }
+        .opcionesDiv {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .opcionesDiv button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        }
+        .innerTitle {
+            color: #ffffff;
+            font-size: 24px;
+            justify-content: center;
+        }
+        #confirmacion {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+    </style>
+</head>
+<body>
+    <header class="grid-container">
+        <div class="container searchForm">
+            <h2>Gestor de Planilla</h2>
+        </div>
+    </header>
+    <h2>Lista de Empleados</h2>
+    <div class="scrollable-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Salario</th>
+                </tr>
+            </thead>
+            <tbody id="empleados">
+                
+            </tbody>
+        </table>
+    </div>
+    <div class="opcionesDiv">
+        <h2 class="innerTitle">Opciones Empleado</h2>
+        <div class="scrollable-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Salario</th>
+                    </tr>
+                </thead>
+                <tbody id="seleccion">
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <button id="insertar" class="boton">Insertar Empleado</button>
+
+    <script>
+        const url = 'http://127.0.0.1:5000/listar_empleados';
+
+        fetch(url)
+            .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al obtener el archivo JSON');
+            }
+
+            return response.json();
+        })
+            .then(data => {
+                console.log(data);
+                cargarEmpleados(data.Empleados);
+        })
+            .catch(error => {
+                console.error('Error:', error);
+        });
+
+        // Función para cargar empleados en la tabla
+    function cargarEmpleados(empleados) {
+        const empleadosLista = document.getElementById('empleados');
+        empleadosLista.innerHTML = ''; 
+    
+        empleados.forEach(empleado => {
+            const fila = document.createElement('tr');
+        
+            const nombreCelda = document.createElement('td');
+            nombreCelda.textContent = empleado.Nombre;
+            fila.appendChild(nombreCelda);
+
+            const salarioCelda = document.createElement('td');
+            salarioCelda.textContent = empleado.Salario;
+            fila.appendChild(salarioCelda);
+
+            const accionesCelda = document.createElement('td');
+            const verBoton = document.createElement('button');
+            const divOpciones = document.querySelector('.opcionesDiv');
+            verBoton.textContent = 'Ver';
+            verBoton.classList.add('boton');
+            verBoton.classList.add('verBoton');
+            verBoton.addEventListener('click', function() {
+                divOpciones.style.display = 'grid';
+                const seleccion = document.getElementById('seleccion');
+                seleccion.innerHTML = '';
+                const filaSeleccion = document.createElement('tr');
+                filaSeleccion.classList.add('filaSeleccion');
+                const nombreSeleccion = document.createElement('td');
+                nombreSeleccion.textContent = empleado.Nombre;
+                filaSeleccion.appendChild(nombreSeleccion);
+                const documentoSeleccion = document.createElement('td');
+                documentoSeleccion.textContent = empleado.Salario;
+                filaSeleccion.appendChild(documentoSeleccion);
+            });
+
+        accionesCelda.appendChild(verBoton);
+        fila.appendChild(accionesCelda);
+
+        empleadosLista.appendChild(fila);
+    });
+}
+    </script>
+</body>
+</html>
