@@ -202,28 +202,6 @@
             salarioCelda.textContent = empleado.Salario;
             fila.appendChild(salarioCelda);
 
-            const accionesCelda = document.createElement('td');
-            const verBoton = document.createElement('button');
-            const divOpciones = document.querySelector('.opcionesDiv');
-            verBoton.textContent = 'Ver';
-            verBoton.classList.add('boton');
-            verBoton.classList.add('verBoton');
-            verBoton.addEventListener('click', function() {
-                divOpciones.style.display = 'grid';
-                const seleccion = document.getElementById('seleccion');
-                seleccion.innerHTML = '';
-                const filaSeleccion = document.createElement('tr');
-                filaSeleccion.classList.add('filaSeleccion');
-                const nombreSeleccion = document.createElement('td');
-                nombreSeleccion.textContent = empleado.Nombre;
-                filaSeleccion.appendChild(nombreSeleccion);
-                const documentoSeleccion = document.createElement('td');
-                documentoSeleccion.textContent = empleado.Salario;
-                filaSeleccion.appendChild(documentoSeleccion);
-            });
-
-        accionesCelda.appendChild(verBoton);
-        fila.appendChild(accionesCelda);
 
         empleadosLista.appendChild(fila);
     });
